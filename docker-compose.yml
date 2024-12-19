@@ -1,11 +1,13 @@
 name: minitwitter
 services:
-  webserver:
+  load-balancer:
     image: nginx
-    container_name: webserver
+    container_name: load-balancer
     restart: always
     ports:
       - 80:80
+    volumes:
+      - ./nginx.conf:/etc/nginx.conf.ro
 
   postgres:
     image: postgres
@@ -16,5 +18,23 @@ services:
     environment:
       POSTGRES_PASSWORD: supersecret123
       POSTGRES_DB: minitwitter
+    volumes:
+      - ./docker-data/postgres:/var/lib/postgresql/data
+  
+  minitwitter1:
+    image: wotasoy/simple-api
+    container_name: minitwitter1
+    restart: always
+    environment:
+      DATABASE_URL: postgressql://postgres:supersecret123@my-postgres:5432/minitwitter
+    volumes:
+      - ./docker-data/postgres:/var/lib/postgresql/data
+
+  minitwitter2:
+    image: wotasoy/simple-api
+    container_name: minitwitter2
+    restart: always
+    environment:
+      DATABASE_URL: postgressql://postgres:supersecret123@my-postgres:5432/minitwitter
     volumes:
       - ./docker-data/postgres:/var/lib/postgresql/data
