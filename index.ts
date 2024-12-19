@@ -1,4 +1,5 @@
 import express, { Router, type Request, type Response} from 'express'
+import ollama from 'ollama'
 
 const app = express()
 app.use(express.json())
@@ -18,7 +19,7 @@ app.get('/', (req: Request, res: Response) => {
     res.redirect('/api')
 })
 
-app.use('/api', apiRouter) //Router an /api anbinden
+app.use('/api', apiRouter) //Router an /api anbinden 
 
 apiRouter.get('/', (req: Request, res: Response) => {
     res.send('Welcome to the API!');
@@ -72,3 +73,15 @@ apiRouter.delete('/posts/:id', (req: Request, res: Response) => {
     posts.splice(existingPost, 1); // Entfernt den Post an der gefundenen Position
     res.status(200).send({ message: 'Post successfully deleted', posts }); // Erfolgreiche Rückmeldung
 });
+
+apiRouter.get('/posts/generate', async function (req: Request, res: Request) {
+    const response = await ollama.chat({
+        model: 'llama3.2:1b',
+        messages: [{ role: 'user', content: '`Netzwerk10.10.0.0 /32 aufteilen in gleichgross zeigt die letzte netzwerkrange `' }],
+      })
+      posts.push({
+        id: posts.length +1,
+        content: response.message.content,
+      })
+      res.send(posts) 
+}) 

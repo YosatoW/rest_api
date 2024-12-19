@@ -1,4 +1,4 @@
-# rest_api
+bun # rest_api
 
 To install dependencies:
 
