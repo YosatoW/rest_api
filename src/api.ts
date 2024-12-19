@@ -51,7 +51,7 @@ export const initializeAPI = (app: Express) => {
     });
     
 
-    
+
     apiRouter.get('/posts/generate', async function (req: Request, res: Request) {
         const response = await ollama.chat({
             model: 'llama3.2:1b',
