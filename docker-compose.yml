@@ -1,0 +1,8 @@
+name: minitwitter
+services:
+  webserver:
+    image: nginx
+    container_name: webserver
+    restart: always
+    ports:
+      - 80:80
