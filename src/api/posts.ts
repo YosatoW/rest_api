@@ -1,12 +1,13 @@
 import express, { type Express, type Request, type Response, Router } from 'express';
 import ollama from 'ollama';
+import {eq} from 'drizzle-orm';
+import bcrypt from 'bcrypt'
 
 import {db} from '../database';
 import {postsTable} from '../db/schema';
-import {eq} from 'drizzle-orm';
 import { apiRouter } from './rootRedirect'
 
-
+// Exportiert der Funktion initializePostsAPI
 export const initializePostsAPI = (app: Express) => {
  
     apiRouter.get('/posts', async (req: Request, res: Response) => {
