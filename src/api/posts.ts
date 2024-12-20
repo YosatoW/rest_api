@@ -16,8 +16,14 @@ export const initializePostsAPI = (app: Express) => {
     })
 
     apiRouter.post('/posts', async (req: Request, res: Response) => {
-        const newPost = await
-        db.insert(postsTable).values(req.body).returning()
+        const userId = req.user?.id // Versucht die ID des auth-User aus dem "req.user" zu extrahieren.
+        if (!userId) {
+            res.status(401).send({ error: 'Unautohorized' })
+            return
+        }
+        // der content aus dem req.body extrahiert. Dies ist der Inhalt des neuen Beitrags in der Datenbank.
+        const { content } = req.body 
+        const newPost = await db.insert(postsTable).values({ content, userId }).returning()
         res.send(newPost[0])
     })
         
