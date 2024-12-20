@@ -14,9 +14,16 @@ const jwtSecret = process.env.JWT_SECRET || "supersecret123"
 export const initializeAuthAPI = (app: Express) => {
     apiRouter.post('/auth/register', async (req: Request, res: Response) => {
         const { username, password } = req.body
+
+        const existingUser = await db.select().from(usersTable).where(eq(usersTable.username, username))
+        if (existingUser) {
+            res.status(400).send({ message: 'A user with this name already exists'})
+            return
+        }
         const passwordHash = await bcrypt.hash(password, 10)
         const newUser = await db.insert(usersTable).values({ username, password: passwordHash}).returning()
         res.send({ id: newUser[0].id, username: newUser[0].username })
+        return
     })
 
     apiRouter.post('/auth/login', async (req: Request, res: Response) => {

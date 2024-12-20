@@ -14,7 +14,7 @@ export const initializePostsAPI = (app: Express) => {
         const posts = await db.select().from(postsTable)
         res.send(posts)
     })
-
+    
     apiRouter.post('/posts', async (req: Request, res: Response) => {
         const userId = req.user?.id // Versucht die ID des auth-User aus dem "req.user" zu extrahieren.
         if (!userId) {
