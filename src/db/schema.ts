@@ -3,6 +3,9 @@ import { integer, pgTable, varchar } from "drizzle-orm/pg-core";
 export const postsTable = pgTable("posts", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
   content: varchar({ length: 255 }).notNull(),
+  userId: integer() // die Spalte "userId" ist von Datentyp Integer, also eine Ganzzahl.
+  .notNull() // Stell sicher das keinen NULL-Wert erhalten kann > einen gültigen Wert für "userId"
+  .references(() => usersTable.id, {onDelete: 'cascade'}),
 });
 
 export const usersTable = pgTable("users", {

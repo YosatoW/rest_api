@@ -1,4 +1,4 @@
-import express, { type Express, type Request, type Response, Router } from 'express';
+import { type Express, type Request, type Response, Router } from 'express'
 
 export const apiRouter = Router(); // Exportiere den apiRouter, damit api.ts ihn verwenden kann
 
@@ -6,10 +6,9 @@ export const rootRedirect = (app: Express) => {
     // Root-Route: Umleitung zu /api
     app.get('/', (req: Request, res: Response) => {
     res.redirect('/api')
-    });
-
+    })
+    
     app.use('/api', apiRouter) // Verwende den apiRouter, der aus api.ts kommt
-
 
     apiRouter.get('/', (req: Request, res: Response) => {
         res.send(`
@@ -39,6 +38,6 @@ export const rootRedirect = (app: Express) => {
                     <a href="/api/auth/login">Login</a>
                 </body>
             </html>
-        `);
-    });
+        `)
+    })
 }

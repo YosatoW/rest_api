@@ -1,10 +1,13 @@
-import express, { type Express, type Request, type Response, Router } from 'express';
+import { type Express, type Request, type Response, Router } from 'express'
 import { rootRedirect } from './rootRedirect'
-import { initializePostsAPI } from './posts';
-import { initializeAuthAPI } from './auth';
+import { authMiddleware } from './auth-middleware'
+import { initializePostsAPI } from './posts'
+import { initializeAuthAPI } from './auth'
+
 
 export const initializeAPI = (app: Express) => {
     rootRedirect(app)
+    authMiddleware(app)
     initializePostsAPI(app)
     initializeAuthAPI(app)
 }

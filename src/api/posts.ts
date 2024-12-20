@@ -1,10 +1,10 @@
-import express, { type Express, type Request, type Response, Router } from 'express';
-import ollama from 'ollama';
-import {eq} from 'drizzle-orm';
+import { type Express, type Request, type Response, Router } from 'express'
+import ollama from 'ollama'
+import { eq } from 'drizzle-orm'
 import bcrypt from 'bcrypt'
 
-import {db} from '../database';
-import {postsTable} from '../db/schema';
+import { db } from '../database'
+import { postsTable } from '../db/schema'
 import { apiRouter } from './rootRedirect'
 
 // Exportiert der Funktion initializePostsAPI
