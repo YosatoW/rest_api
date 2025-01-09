@@ -1,6 +1,6 @@
 import { type Express, type Request, type Response, Router } from 'express'
 import ollama from 'ollama'
-import { eq } from 'drizzle-orm'
+import { and, eq } from 'drizzle-orm'
 import bcrypt from 'bcrypt'
 
 import { db } from '../database'
@@ -11,10 +11,12 @@ import { apiRouter } from './rootRedirect'
 export const initializePostsAPI = (app: Express) => {
  
     apiRouter.get('/posts', async (req: Request, res: Response) => {
-        const posts = await db.select().from(postsTable)
+        const posts = await db
+        .select()
+        .from(postsTable)
         res.send(posts)
     })
-    
+
     apiRouter.post('/posts', async (req: Request, res: Response) => {
         const userId = req.user?.id // Versucht die ID des auth-User aus dem "req.user" zu extrahieren.
         if (!userId) {
@@ -23,21 +25,38 @@ export const initializePostsAPI = (app: Express) => {
         }
         // der content aus dem req.body extrahiert. Dies ist der Inhalt des neuen Beitrags in der Datenbank.
         const { content } = req.body 
-        const newPost = await db.insert(postsTable).values({ content, userId }).returning()
+        const newPost = await db
+        .insert(postsTable)
+        .values({ content, userId })
+        .returning()
         res.send(newPost[0])
     })
         
     apiRouter.put('/posts/:id', async (req: Request, res: Response) => {
         const id = parseInt(req.params.id)
-        const updatedPost = await
-        db.update(postsTable).set(req.body).where(eq(postsTable.id,
-        id)).returning()
+        const userId = req.user?.id
+        if (!userId) {
+            res.status(401).send({ error: 'Unautohorized' })
+            return
+        }
+        const updatedPost = await db
+        .update(postsTable)
+        .set(req.body)
+        .where(and(eq(postsTable.id, id), eq(postsTable.userId, userId)))
+        .returning()
         res.send(updatedPost[0])
     })
        
     app.delete('/api/posts/:id', (req: Request, res: Response) => {
         const id = parseInt(req.params.id)
-        db.delete(postsTable).where(eq(postsTable.id, id)).execute()
+        const userId = req.user?.id
+        if (!userId) {
+            res.status(401).send({ error: 'Unautohorized' })
+            return
+        }
+        db.delete(postsTable)
+        .where(and(eq(postsTable.id, id), eq(postsTable.userId, userId)))
+        .execute()
         res.send({ id })
     })
     

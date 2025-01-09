@@ -19,8 +19,6 @@ export const rootRedirect = (app: Express) => {
                         <label for="navigation">Choose where to go:</label>
                         <select id="navigation" name="navigation">
                             <option value="posts">Posts</option>
-                            <option value="auth/register">Register</option>
-                            <option value="auth/login">Login</option>
                         </select>
                         <button type="submit">Go</button>
                     </form>
@@ -34,8 +32,6 @@ export const rootRedirect = (app: Express) => {
                     </script>
                     <br/>
                     <a href="/api/posts">Posts</a>
-                    <a href="/api/auth/register">Register</a>
-                    <a href="/api/auth/login">Login</a>
                 </body>
             </html>
         `)
