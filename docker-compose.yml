@@ -28,7 +28,7 @@ services:
       context: frontend
       dockerfile: Dockerfile
     environment:
-      - NUX_PubliC_API_BASE_URL=http://localhost:80
+      NUX_PubliC_API_BASE_URL: http://localhost:80
 
   minitwitter1:
     image: wotasoy/simple-api
