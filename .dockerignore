@@ -174,14 +174,6 @@ dist
 # Finder (MacOS) folder config
 .DS_Store
 
-
-node_modules
-.git
-.gitignore
-.nuxt
-.output
-dist
-
 # Custom
 docker-data
 README_WYO.md
