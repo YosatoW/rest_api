@@ -55,6 +55,18 @@ services:
     container_name: ollama
     restart: always
     ports:
-      - 12434:11434 # so it doesn't conflict with an installed version
+      - 12434:11434
     volumes:
       - ./docker-data/ollama:/root/.ollama
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=1
+
+  redis:
+    image: redis/redis-stack:latest
+    ports:
+      - 6379:6379
+    healthcheck:
+      test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
+
+volumes: 
+  ollama: {}
